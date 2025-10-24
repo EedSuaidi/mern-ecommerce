@@ -3,19 +3,20 @@ import path from "path";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads");
+    cb(null, "uploads"); // Pastikan folder `uploads/` sudah ada
   },
   filename: function (req, file, cb) {
     const ext = path.extname(file.originalname);
-    const filename = `product-${Date.now()}${ext}`;
+    const filename = `product-${Date.now()}${ext}`; //product-1753682128110.png
     cb(null, filename);
   },
 });
 
+// 📌 Filter hanya menerima JPEG/JPG/PNG
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+  const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
   if (allowedTypes.includes(file.mimetype)) cb(null, true);
-  else cb(new Error("Invalid file type. Only JPEG, JPG, and PNG are allowed."));
+  else cb(new Error("Hanya file JPEG/JPG/PNG yang diperbolehkan"));
 };
 
-const upload = multer({ storage: storage, fileFilter });
+export const upload = multer({ storage: storage, fileFilter });
